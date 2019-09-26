@@ -20,6 +20,10 @@ using namespace std;
 struct data{
 	string word;
 	int counter;
+	void reset(){
+		word = "";
+		counter = 0;
+	}
 };
 //TODO add a global array of entry structs (global to this file)
 data storage[100];
@@ -28,7 +32,11 @@ int storageIterator = 0;
 int size = 0;
 //TODO define all functions in header file
 void clearArray(){
-//words->delete;
+	for(int i = 0;i<size;i++){
+		storage[i].reset();
+			}
+	storageIterator = 0;
+	size = 0;
 }
 
 int getArraySize(){
@@ -36,11 +44,11 @@ return size;
 }
 
 std::string getArrayWordAt(int i){
-return "";
+return storage[i].word;
 }
 
 int getArrayWord_NumbOccur_At(int i){
-return 0;
+return storage[i].counter;
 }
 
 bool processFile(std::fstream &myfstream){
@@ -51,6 +59,7 @@ bool processFile(std::fstream &myfstream){
 	while(!myfstream.eof()){
 	getline(myfstream,myString);
 	processLine(myString);
+
 	}
 return true;
 }
@@ -59,11 +68,27 @@ void processLine(std::string &myString){
 	string token;
 	stringstream ss(myString);
 	while(getline(ss, token, ' ')){
+
 		processToken(token);
+
 	}
 }
 
 void processToken(std::string &token){
+	bool flag = false;
+	if(!(token == " "|| token.size() == 0)){
+	for(int i = 0;i<token.size();i++){
+		//int uppercaseChar = toupper(token[i]);
+		int uppercaseChar = (token[i]);
+				if (uppercaseChar < (int)'a'|| uppercaseChar > (int)'z' ) {
+
+					flag = true;
+					break;
+				}
+
+
+	}
+if(!flag){
 	if(size == 0){
 		storage[0].word= token;
 		storage[0].counter= 1;
@@ -73,16 +98,21 @@ void processToken(std::string &token){
 		for(int i = 0;i<size;i++){
 			if(token == storage[i].word){
 				storage[i].counter++;
+				flag = true;
 				break;
 			}
 		}
+		if(!flag){
 		storage[size+1].word = token;
 		storage[size+1].counter++;
 		size++;
 		storageIterator++;
+		}
 	}
-
 }
+	}
+}
+
 
 bool openFile(std::fstream& myfile, const std::string& myFileName,
 		std::ios_base::openmode mode /*= std::ios_base::in*/){
