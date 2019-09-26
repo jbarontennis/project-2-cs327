@@ -59,6 +59,9 @@ bool processFile(std::fstream &myfstream){
 	std::string myString;
 	while(!myfstream.eof()){
 	getline(myfstream,myString);
+	if(myString == ""){
+		return false;
+	}
 	processLine(myString);
 
 	}
@@ -133,16 +136,35 @@ myfile.close();
 }
 
 int writeArraytoFile(const std::string &outputfilename){
-	fstream myfile = fstream(outputfilename);
+	ofstream myfile = ofstream(outputfilename);
+	//bool worked = false;
+	if(myfile.is_open()){
 	for(int i = 0;i<size;i++){
-		myfile<<storage[i].word;
+		myfile<<storage[i].word<< " ";
+		myfile<<storage[i].counter<<endl;
+		//worked = true;
 	}
-
+	}
 return 0;
 }
+void swap(int left, int right){
+	data tmp;
+	tmp = storage[left];
+	storage[left] = storage[right];
+	storage[right] = tmp;
 
+}
 void sortArray(constants::sortOrder so){
-
+bool swapped = true;
+while(swapped){
+	swapped = false;
+	for(int i = 0;i<size-1;i++){
+		if(storage[i].word> storage[i+1].word){
+			swap(i,i+1);
+			swapped = true;
+		}
+	}
+}
 }
 //TODO look in utilities.h for useful functions, particularly strip_unwanted_chars!
 
