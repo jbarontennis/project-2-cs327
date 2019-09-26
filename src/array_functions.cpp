@@ -80,7 +80,7 @@ void processToken(std::string &token){
 	for(int i = 0;i<token.size();i++){
 		//int uppercaseChar = toupper(token[i]);
 		int uppercaseChar = (token[i]);
-				if (uppercaseChar < (int)'a'|| uppercaseChar > (int)'z' ) {
+				if (uppercaseChar < (int)'a'|| uppercaseChar > (int)'z') {
 
 					flag = true;
 					break;
@@ -103,8 +103,8 @@ if(!flag){
 			}
 		}
 		if(!flag){
-		storage[size+1].word = token;
-		storage[size+1].counter++;
+		storage[size].word = token;
+		storage[size].counter++;
 		size++;
 		storageIterator++;
 		}
