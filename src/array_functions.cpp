@@ -11,6 +11,7 @@
 #include <sstream>
 #include <string>
 #include "array_functions.h"
+#include "utilities.h"
 //============================================================================
 using namespace std;
 //============================================================================
@@ -63,12 +64,12 @@ bool processFile(std::fstream &myfstream){
 	}
 return true;
 }
-
+void strip_unwanted_chars();
 void processLine(std::string &myString){
 	string token;
 	stringstream ss(myString);
 	while(getline(ss, token, ' ')){
-
+		strip_unwanted_chars(token);
 		processToken(token);
 
 	}
@@ -77,11 +78,10 @@ void processLine(std::string &myString){
 void processToken(std::string &token){
 	bool flag = false;
 	if(!(token == " "|| token.size() == 0)){
+		//strip_unwanted_chars();
 	for(int i = 0;i<token.size();i++){
-		//int uppercaseChar = toupper(token[i]);
-		int uppercaseChar = (token[i]);
-				if (uppercaseChar < (int)'a'|| uppercaseChar > (int)'z') {
-
+		token[i] = (int)tolower(token[i]);
+						if (token[i] < (int)'a'|| token[i] > (int)'z') {
 					flag = true;
 					break;
 				}
@@ -114,10 +114,13 @@ if(!flag){
 }
 
 
-bool openFile(std::fstream& myfile, const std::string& myFileName,
-		std::ios_base::openmode mode /*= std::ios_base::in*/){
+bool openFile(fstream& myfile, const std::string& myFileName,
+		std::ios_base::openmode mode){
 try{
 	myfile.open(myFileName,mode);
+	if(myfile.fail()){
+		return false;
+	}
 }
 catch(exception& e){
 	return false;
@@ -130,6 +133,11 @@ myfile.close();
 }
 
 int writeArraytoFile(const std::string &outputfilename){
+	fstream myfile = fstream(outputfilename);
+	for(int i = 0;i<size;i++){
+		myfile<<storage[i].word;
+	}
+
 return 0;
 }
 
