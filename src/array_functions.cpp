@@ -10,10 +10,13 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "constants.h"
 #include "array_functions.h"
 #include "utilities.h"
+
 //============================================================================
 using namespace std;
+using namespace constants;
 //============================================================================
 //	stuff you will need
 //============================================================================
@@ -27,7 +30,7 @@ struct data{
 	}
 };
 //TODO add a global array of entry structs (global to this file)
-data storage[100];
+data storage[1000];
 //TODO add variable to keep track of next available slot in array
 int storageIterator = 0;
 int size = 0;
@@ -120,7 +123,7 @@ if(!flag){
 bool openFile(fstream& myfile, const std::string& myFileName,
 		std::ios_base::openmode mode){
 try{
-	myfile.open(myFileName,mode);
+	myfile.open(myFileName.c_str(),mode);
 	if(myfile.fail()){
 		return false;
 	}
@@ -128,6 +131,7 @@ try{
 catch(exception& e){
 	return false;
 }
+
 return true;
 }
 
@@ -136,16 +140,23 @@ myfile.close();
 }
 
 int writeArraytoFile(const std::string &outputfilename){
-	ofstream myfile = ofstream(outputfilename);
+	ofstream myfile;
+	myfile.open(outputfilename.c_str());
 	//bool worked = false;
-	if(myfile.is_open()){
+	if(!myfile.is_open()){
+		return FAIL_FILE_DID_NOT_OPEN;
+	}
+	if(size == 0){
+		return FAIL_NO_ARRAY_DATA;
+	}
 	for(int i = 0;i<size;i++){
-		myfile<<storage[i].word<< " ";
-		myfile<<storage[i].counter<<endl;
+		/*myfile<<storage[i].word<< " ";
+		myfile<<storage[i].counter<<endl;*/
 		//worked = true;
+		myfile<<storage[i].word + " " + intToString(storage[i].counter) + "/n";
 	}
-	}
-return 0;
+
+return SUCCESS;
 }
 void swap(int left, int right){
 	data tmp;
